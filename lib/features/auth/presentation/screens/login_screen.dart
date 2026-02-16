@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:learnbook/core/network/api_endpoints.dart';
-import 'package:learnbook/core/storage/secure_storage_service.dart';
+import 'package:learnbook/core/providers/core_providers.dart';
 import 'package:learnbook/core/utils/custom_sized_box.dart';
-import 'package:learnbook/features/auth/presentation/providers/phn_num_provider.dart';
-import 'package:learnbook/features/home/presentation/screens/home_screen.dart';
 
 class LoginScreen extends ConsumerWidget {
-  final Dio dio;
-  final SecureStorageService storage;
-  const LoginScreen({super.key, required this.dio, required this.storage});
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    Future<void> login(BuildContext context) async {
-      final phNum = ref.read(phoneNumProvider);
+    final phoneController = TextEditingController();
+
+    Future<void> login() async {
+      final dio = ref.read(dioProvider);
+      final storage = ref.read(secureStorageProvider);
+
+      final phNum = phoneController.text.trim();
       if (phNum.isEmpty || phNum.length < 10) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Please enter a valid number")),
@@ -32,14 +33,12 @@ class LoginScreen extends ConsumerWidget {
         final token = response.data['token']['access'];
         await storage.saveToken(token);
 
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => HomeScreen(dio: dio)),
-        );
+        ref.invalidate(authCheckProvider);
+
       } on DioException catch (e) {
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(const SnackBar(content: Text("Login Failed")));
+        ).showSnackBar(SnackBar(content: Text("Login Failed ($e)")));
       }
     }
 
@@ -95,9 +94,7 @@ class LoginScreen extends ConsumerWidget {
                   Expanded(
                     child: TextField(
                       maxLength: 10,
-                      onChanged: (value) {
-                        ref.read(phoneNumProvider.notifier).state = value;
-                      },
+                      controller: phoneController,
                       keyboardType: TextInputType.phone,
                       style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
@@ -126,7 +123,7 @@ class LoginScreen extends ConsumerWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 50),
                   child: TextButton(
-                    onPressed: () => login(context),
+                    onPressed: () => login(),
                     style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 15,
