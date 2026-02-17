@@ -4,7 +4,9 @@ import 'package:learnbook/core/utils/custom_sized_box.dart';
 import 'package:learnbook/core/utils/responsive.dart';
 import 'package:learnbook/features/home/data/models/category_model.dart';
 import 'package:learnbook/features/home/data/providers/category_list_provider.dart';
-import 'package:learnbook/features/home/presentation/widgets/feed_section.dart';
+import 'package:learnbook/features/feed/presentation/widgets/feed_section.dart';
+import 'package:learnbook/features/my_feed/presentation/screens/add_feed_screen.dart';
+import 'package:learnbook/features/my_feed/presentation/screens/my_feed_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -35,13 +37,21 @@ class HomeScreen extends ConsumerWidget {
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
       ),
-      floatingActionButton: Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Colors.red,
+      floatingActionButton: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddFeedScreen()),
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.red,
+          ),
+          child: Icon(Icons.add, size: 40, color: Colors.white),
         ),
-        child: Icon(Icons.add, size: 40, color: Colors.white),
       ),
     );
   }
@@ -68,11 +78,19 @@ class HomeScreen extends ConsumerWidget {
         ],
       ),
       actions: [
-        ClipOval(
-          child: Image.asset(
-            "assets/images/Logo.png",
-            width: context.width(45),
-            height: context.width(45),
+        GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyFeedScreen()),
+            );
+          },
+          child: ClipOval(
+            child: Image.asset(
+              "assets/images/Logo.png",
+              width: context.width(45),
+              height: context.width(45),
+            ),
           ),
         ),
       ],

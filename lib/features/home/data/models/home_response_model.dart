@@ -1,5 +1,5 @@
 import 'package:learnbook/features/home/data/models/category_model.dart';
-import 'package:learnbook/features/home/data/models/feed_model.dart';
+import 'package:learnbook/features/feed/data/models/feed_model.dart';
 import 'package:learnbook/features/home/data/models/user_model.dart';
 
 class HomeResponseModel {

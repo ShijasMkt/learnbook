@@ -1,14 +1,16 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:learnbook/core/utils/custom_sized_box.dart';
 import 'package:learnbook/core/utils/responsive.dart';
-import 'package:learnbook/features/home/data/models/feed_model.dart';
+import 'package:learnbook/features/feed/data/models/feed_model.dart';
 import 'package:learnbook/features/home/data/models/user_model.dart';
-import 'package:learnbook/features/home/presentation/widgets/feed_video.dart';
+import 'package:learnbook/features/feed/presentation/widgets/feed_video.dart';
 
 class FeedCard extends StatelessWidget {
   final FeedModel feedData;
-  const FeedCard({super.key, required this.feedData});
+  final bool myFeed;
+  const FeedCard({super.key, required this.feedData, this.myFeed = false});
 
   String formatDate(String dateString) {
     final date = DateTime.parse(dateString);
@@ -25,6 +27,7 @@ class FeedCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          myFeed? SizedBox():
           Row(
             children: [
               ClipOval(
@@ -37,7 +40,7 @@ class FeedCard extends StatelessWidget {
                     : SizedBox(
                         width: context.width(35),
                         height: context.width(35),
-                        child: Icon(Icons.broken_image, color: Colors.white),
+                        child: Icon(CupertinoIcons.person, color: Colors.white),
                       ),
               ),
               context.customSizedBoxWdt(context, 10),

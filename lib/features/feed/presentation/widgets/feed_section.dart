@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:learnbook/core/utils/custom_sized_box.dart';
-import 'package:learnbook/features/home/data/models/feed_model.dart';
+import 'package:learnbook/features/feed/data/models/feed_model.dart';
 import 'package:learnbook/features/home/data/providers/home_data_provider.dart';
-import 'package:learnbook/features/home/presentation/widgets/feed_card.dart';
+import 'package:learnbook/features/feed/presentation/widgets/feed_card.dart';
 
 class FeedSection extends ConsumerWidget {
   const FeedSection({super.key});
@@ -23,7 +23,7 @@ class FeedSection extends ConsumerWidget {
             return FeedCard(feedData: feedData);
           },
           separatorBuilder: (context, index) =>
-              context.customSizedBoxHgt(context, 5),
+              context.customSizedBoxHgt(context, 10),
           itemCount: results.length,
         );
       },
